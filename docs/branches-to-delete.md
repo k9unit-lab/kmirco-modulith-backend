@@ -8,4 +8,4 @@ Do not delete any branch before that. When a pull request is merged, add its bra
 |---|---|---|
 | `setup/agent-workflow` | [#2](https://github.com/k9unit-lab/kmirco-modulith-backend/pull/2) | 2026-10-30 |
 | `docs/scope-phase1` | [#1](https://github.com/k9unit-lab/kmirco-modulith-backend/pull/1) (into `setup/agent-workflow`, then #2) | 2026-10-30 |
-| `chore/branch-cleanup-list` | (this list's own pull request) | |
+| `chore/branch-cleanup-list` | [#3](https://github.com/k9unit-lab/kmirco-modulith-backend/pull/3) | |
