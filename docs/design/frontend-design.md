@@ -30,7 +30,7 @@ Status labels: **Locked** agreed in our discussion · **Proposed** my suggestion
 | Font         | Figtree (one family).                                                                                                                                      | **Locked** |
 | Mobile       | React Native, sharing API types and logic with web through a small shared package.                                                                         | **Locked** |
 | Dependencies | Strict supply-chain rules: pnpm, no install scripts, 7-day release cooldown, pinned versions, scanning (section 13).                                       | **Locked** |
-| Testing      | Vitest + React Testing Library + MSW for unit and component tests; Playwright for end-to-end tests.                                                        | **Locked** |
+| Testing      | Build first, check in the browser, write a regression test only when something breaks (section 15). No test suites up front.                                                        | **Locked** |
 | Hosting      | Covered in the deployment doc.                                                                                                                             | **Open**   |
 
 ## Scope and timeline
@@ -319,12 +319,16 @@ Latest stable versions on npm, checked 30 Oct 2026. Final pins are chosen at pro
 
 ## Testing and quality
 
-| Level         | What                                                                                           | Tools                                      |
-|---------------|------------------------------------------------------------------------------------------------|--------------------------------------------|
-| Unit          | Money formatting, variant picker rules, error mapping                                          | Vitest                                     |
-| Component     | Cart, checkout steps, admin forms, with a fake API                                             | React Testing Library + MSW                |
-| End to end    | Guest checkout with fake payment; login + order history; admin creates a product with variants | Playwright, against the local Docker stack |
-| Static checks | TypeScript strict mode, ESLint (incl. feature import rule), Prettier                           | Run on every pull request                  |
+**Approach: build first, check the real app, test only what broke.** No test driven development and no test suites written up front.
+
+1. Build the screen or flow.
+2. Check it in the browser against the local backend (and the spec).
+3. If the output is wrong: fix the root cause and add **one regression test** for that bug.
+
+| Kind | When | Tools |
+|---|---|---|
+| Static checks | Always, on every pull request | TypeScript strict mode, ESLint (incl. feature import rule), Prettier |
+| Regression test | Only after a bug is found | Vitest + React Testing Library + MSW; Playwright for a broken end to end flow |
 
 ## Mobile app prep (phase 2)
 

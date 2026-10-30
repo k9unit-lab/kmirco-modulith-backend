@@ -3,7 +3,7 @@
 An ecommerce backend built as a Spring Modulith. It serves the KMicro web shop now and a mobile app later. Shoppers browse, search, buy as guests or with an account, and pay with Razorpay. An admin runs the catalog, stock, orders and store settings. Every locked decision lives in `docs/design/backend-design.md`; this scope only orders the work.
 
 **Build approach:** Tracer Bullet (prove one thin real path through every layer first, then thicken one part at a time).
-**Workflow:** Alpha (after `/develop`, run `/check verify`). Features that touch login, checkout, money or personal data carry a `· Beta` tag, which adds `/test`. `/architect` is the recommended first stop for a feature with a real decision, but skippable when the design doc already settles the build. Any feature can carry its own tag to do more or less.
+**Workflow:** Alpha for every feature (after `/develop`, run `/check verify`). No test first approach and no `/test` step: you build, then check the real behavior. Only when the output is wrong, `/debug` fixes it and adds one regression test for that bug. `/architect` is the recommended first stop for a feature with a real decision, but skippable when the design doc already settles the build. Any feature can carry its own tag to do more or less.
 **Target:** tester launch on 13 Nov 2026 (2 weeks), after slice 6 plus observability. This is a stretch for one developer. Slices 7 to 11 finish phase 1 after testers start.
 **Phase 1 is a success when:** most testers find a product, check out, pay (test mode) and get the email with no help and no errors, and the admin can add products, manage stock, ship and refund orders without touching the database.
 
@@ -35,7 +35,7 @@ _The web screens for each slice are built in the kmicro-frontend repo (see `docs
 
 ## Foundations
 
-### 1. Stack & architecture · needs a decision · Beta
+### 1. Stack & architecture · needs a decision
 Record the locked stack and module layout from the design doc as a spec, then scaffold a runnable Spring Modulith app with the local Docker Compose core profile.
 **Done when:** the stack and module rules are recorded in a spec; the empty app starts from IntelliJ with Postgres, Redis, Keycloak, Meilisearch and Mailpit started for you; the Spring Modulith boundary test passes.
 - [ ] Decide the stack (spec): `/architect stack & architecture`
@@ -50,14 +50,14 @@ One schema per module for every phase 1 module, money as amount plus currency, U
 **Done when:** Flyway creates every phase 1 schema from empty, and the model supports later phases (sellers, partial refunds, abandoned cart) without a breaking migration.
 - [ ] Design it (spec): `/architect data model`
 
-### 4. Security & login foundation · needs a decision · Beta
+### 4. Security & login foundation · needs a decision
 Keycloak realm as code, web login through the backend (BFF) with a Redis session cookie and CSRF protection, Bearer tokens for mobile, roles, the shared error format and rate limiting.
 **Done when:** a test admin and a test customer can log in through `/bff/login`; `/bff/me` shows their roles; admin endpoints reject customers; Bearer tokens work for the same endpoints; changes without a CSRF token are refused.
 - [ ] Design it (spec): `/architect security & login foundation`
 
 ## Slice 1: Core buying loop
 
-### 5. Core buying loop · needs a decision · Beta
+### 5. Core buying loop · needs a decision
 The thinnest real thread through the whole shop, as a guest: admin adds a simple product with price and stock, the shopper lists products, adds to a cart (cart token), checks out with an email and address, pays with the fake provider, the order becomes paid, stock is confirmed and a confirmation email arrives. Store settings start with currency, tax and a flat shipping fee. This slice is the walking skeleton.
 **Done when:** one guest order goes from empty cart to paid with server side prices, tax and shipping; a repeated checkout request with the same key makes one order; the confirmation email shows in Mailpit; the module boundary test still passes.
 - [ ] Design it (spec): `/architect core buying loop`
@@ -78,14 +78,14 @@ Admin defined option types (Size, Color, Weight, anything) and values; each vari
 
 ## Slice 4: Customer accounts
 
-### 8. Customer accounts · needs a decision · Beta
+### 8. Customer accounts · needs a decision
 Logged in shopping: profile, addresses, wishlist, guest cart merge on login, my orders, guest order link by email, and "create my account" at checkout.
 **Done when:** a customer sees only their own orders and addresses (others give 404); the guest cart merges on login; the guest order link works and expires; ticking "create my account" creates a Keycloak user and sends the set password email; past guest orders link after the first verified login.
 - [ ] Design it (spec): `/architect customer accounts`
 
 ## Slice 5: Razorpay payments & order expiry
 
-### 9. Razorpay payments & order expiry · needs a decision · Beta
+### 9. Razorpay payments & order expiry · needs a decision
 Real Razorpay test mode payments behind the payment provider interface, signed webhooks as the source of truth, payment retry, and expiry of unpaid orders with stock release.
 **Done when:** a test card payment marks the order paid only after the signed webhook; a repeated webhook changes nothing; a failed payment can be retried; an unpaid order expires on time and its stock comes back.
 - [ ] Design it (spec): `/architect razorpay payments & order expiry`
@@ -109,14 +109,14 @@ When the admin ships an order, they add the carrier, tracking number and an opti
 **Done when:** shipping an order requires the carrier and tracking number; the shipped email arrives; the info shows on the customer's and guest's order view.
 - [ ] Build it: `/develop basic shipping info`
 
-### 13. Manual refund record · Beta
+### 13. Manual refund record
 The admin cancels a paid order, refunds in the Razorpay dashboard, then records the refund reference and date, which marks the order refunded.
 **Done when:** only cancelled orders can be marked refunded; the reference and date are stored; the customer gets a refund email; nothing calls the Razorpay refund API.
 - [ ] Build it: `/develop manual refund record`
 
 ## Slice 8: Basic coupons
 
-### 14. Basic coupons · needs a decision · Beta
+### 14. Basic coupons · needs a decision
 Admin made codes with percent or fixed discount, minimum order, dates, total and per customer limits, one per order, reserved at checkout and counted when paid.
 **Done when:** a valid code changes the totals in the order items, discount, tax, shipping; invalid codes give a clear reason; two shoppers cannot both take the last use; expired or cancelled orders free their coupon; coupon checks are rate limited.
 - [ ] Design it (spec): `/architect basic coupons`
@@ -130,7 +130,7 @@ Verified buyers rate 1 to 5 stars with optional plain text, one review per produ
 
 ## Slice 10: Privacy & legal basics
 
-### 16. Privacy & legal basics · needs a decision · Beta
+### 16. Privacy & legal basics · needs a decision
 Privacy policy and terms pages served by the API, customer data export and account deletion across modules, and stored consent for marketing emails.
 **Done when:** a customer can download their data and delete their account; deletion removes or anonymizes personal data in every module while keeping order records the law needs; consent is recorded with time and version.
 - [ ] Design it (spec): `/architect privacy & legal basics`
@@ -145,10 +145,10 @@ Send the selected order, payment and catalog events to Kafka topics, documented 
 ## Deferred
 Out of scope for phase 1, kept so the plan stays honest.
 - **Mobile app support**: phase 2; no new backend features expected, only fixes the app surfaces · needs a decision
-- **Refunds through the Razorpay API (full and partial)**: phase 3; approach already noted in the design doc, section 16 · needs a decision · Beta
+- **Refunds through the Razorpay API (full and partial)**: phase 3; approach already noted in the design doc, section 16 · needs a decision
 - **Carrier integration**: live rates, labels, tracking updates · needs a decision
 - **Abandoned cart reminders**: email and push · needs a decision
-- **Multi vendor marketplace**: sellers, sub orders, payouts · needs a decision · Beta
+- **Multi vendor marketplace**: sellers, sub orders, payouts · needs a decision
 - **Richer promotions**: automatic deals, product or category coupons, free shipping coupons · needs a decision
 - **Review replies and photos** · needs a decision
 - **Google and Facebook login**: Keycloak setup only, no app code · needs a decision

@@ -579,16 +579,18 @@ All paths above start with `/api/v1`.
 
 ## Testing
 
-| Level        | What                                                             | Tools                                       |
-|--------------|------------------------------------------------------------------|---------------------------------------------|
-| Architecture | Module boundaries, no cycles, generated module docs              | `ApplicationModules.verify()`, `Documenter` |
-| Unit         | Money, tax math, order status moves, cart merge                  | JUnit 5, AssertJ                            |
-| Module       | One module started alone; its events checked                     | `@ApplicationModuleTest`, `Scenario` API    |
-| Integration  | Real Postgres, Redis, Kafka, Meilisearch, Keycloak               | Testcontainers                              |
-| API          | Endpoints, security rules (including "can't see others' orders") | MockMvc / RestTestClient, JWT test support  |
-| End to end   | Browse → cart → checkout → fake pay → email arrives              | Testcontainers + Mailpit API                |
+**Approach: build first, check the real app, test only what broke.** No test driven development and no test suites written up front, to avoid over testing and wasted effort.
 
-Each pull request must pass all of these before merge. The CI pipeline is covered in the deployment doc.
+1. Build the feature (`/develop`).
+2. Check it by running the real app against the spec (`/check verify`): Swagger or Postman calls, Mailpit for emails, Grafana for traces.
+3. If the output is wrong: find the root cause (`/debug`), fix it, and add **one regression test** for that bug so it can't come back.
+
+| Kind | When | Tools |
+|---|---|---|
+| Module boundary check | Always (the one standing test; it keeps the modulith honest) | `ApplicationModules.verify()`, `Documenter` |
+| Regression test | Only after a bug is found | JUnit 5, AssertJ; `@ApplicationModuleTest` / `Scenario` for events; Testcontainers when real Postgres, Redis, Kafka, Meilisearch or Keycloak is needed; MockMvc for API and security rules |
+
+Each pull request must pass the boundary check and every regression test before merge. The CI pipeline is covered in the deployment doc.
 
 ## Path to microservices
 

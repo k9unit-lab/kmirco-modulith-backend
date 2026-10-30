@@ -17,9 +17,12 @@ Skills live in `.agents/skills/` (Claude Code reads them through the `.claude/sk
 
 - First time only: `/scope` (seed the scope from the design doc phases) → `/architect` (record the stack spec from the design doc) → scaffold → `/audit`.
 - Per feature: `/architect` → `/develop` → `/check verify` → `/sync`.
+- When `/check verify` finds wrong output: `/debug` → fix → one regression test for that bug.
 - State lives in files (`docs/scope/`, `docs/specs/`, this file), so start a fresh session (`/clear`) between steps to keep context small.
 
 ## Rules
+
+- Testing: no test driven development and no test suites written up front. Build the feature, then check it by running the real app (`/check verify`). Write a test only when the output is wrong, as a regression test for that bug. The one standing test is the Spring Modulith module boundary check.
 
 - Phase 1 scope only, unless the owner says otherwise. Later phase work is listed in the design doc, section 16.
 - No new dependency, skill, MCP server or tool install without the owner's approval. Never run `npx skills add`. Pin exact versions. Prefer versions published at least 7 days ago.
