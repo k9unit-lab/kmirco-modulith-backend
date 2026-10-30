@@ -1,0 +1,46 @@
+spring:
+  application:
+    name: kmicro-backend
+  threads:
+    virtual:
+      enabled: true
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+
+  # One Flyway run for all modules. Each module folder owns its schema; the history table lives in public.
+  # Version blocks: modulith 0, identity 1, customer 2, catalog 3, search 4, inventory 5, cart 6,
+  # ordering 7, payment 8, notification 9, settings 10, promotion 11, review 12.
+  flyway:
+    default-schema: public
+    create-schemas: false
+    schemas: modulith, identity, customer, catalog, search, inventory, cart, ordering, payment, notification, settings, promotion, review
+    locations:
+      - classpath:db/migration/modulith
+      - classpath:db/migration/identity
+      - classpath:db/migration/customer
+      - classpath:db/migration/catalog
+      - classpath:db/migration/search
+      - classpath:db/migration/inventory
+      - classpath:db/migration/cart
+      - classpath:db/migration/ordering
+      - classpath:db/migration/payment
+      - classpath:db/migration/notification
+      - classpath:db/migration/settings
+      - classpath:db/migration/promotion
+      - classpath:db/migration/review
+
+  modulith:
+    events:
+      jdbc:
+        schema: modulith
+        schema-initialization:
+          enabled: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health

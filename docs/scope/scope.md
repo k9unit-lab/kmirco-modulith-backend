@@ -38,9 +38,9 @@ _The web screens for each slice are built in the kmicro-frontend repo (see `docs
 ### 1. Stack & architecture · in-progress
 Record the locked stack and module layout from the design doc as a spec, then scaffold a runnable Spring Modulith app with the local Docker Compose core profile.
 **Done when:** the stack and module rules are recorded in a spec; the empty app starts from IntelliJ with Postgres, Redis, Keycloak, Meilisearch and Mailpit started for you; the Spring Modulith boundary test passes.
-spec [0001](../specs/0001-stack-architecture/index.md)
+spec [0001](../specs/0001-stack-architecture/index.md) · code in `pom.xml`, `compose.yaml`, `src/main/java/com/kmicro/`
 - [x] Decide the stack (spec): `/architect stack & architecture`
-- [ ] Scaffold from the decision: `/develop stack & architecture`
+- [x] Scaffold from the decision: `/develop stack & architecture`
 - [ ] Verify it: `/check verify stack & architecture`
 
 ### 2. Coding standards & tooling

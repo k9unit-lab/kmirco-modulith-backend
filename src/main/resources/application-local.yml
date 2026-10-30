@@ -1,0 +1,9 @@
+# Local only. IntelliJ runs KmicroApplication with the Spring profile "local".
+spring:
+  docker:
+    compose:
+      file: compose.yaml
+      profiles:
+        active: core
+      # Keep containers running between app restarts (Keycloak is slow to start).
+      lifecycle-management: start-only

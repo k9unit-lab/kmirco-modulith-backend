@@ -1,7 +1,7 @@
 # 0001. Spring Modulith stack and module layout for the KMicro backend
 
 **Date**: 2026-10-30
-**Status**: Proposed
+**Status**: In Progress
 
 ## Summary
 
