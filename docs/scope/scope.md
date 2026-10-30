@@ -15,7 +15,7 @@ _The web screens for each slice are built in the kmicro-frontend repo (see `docs
 
 | # | Feature | Phase | Status |
 |---|---------|-------|--------|
-| 1 | Stack & architecture | Foundation | planned |
+| 1 | Stack & architecture | Foundation | in-progress |
 | 2 | Coding standards & tooling | Foundation | planned |
 | 3 | Data model | Foundation | planned |
 | 4 | Security & login foundation | Foundation | planned |
@@ -35,10 +35,13 @@ _The web screens for each slice are built in the kmicro-frontend repo (see `docs
 
 ## Foundations
 
-### 1. Stack & architecture · needs a decision
+### 1. Stack & architecture · in-progress
 Record the locked stack and module layout from the design doc as a spec, then scaffold a runnable Spring Modulith app with the local Docker Compose core profile.
 **Done when:** the stack and module rules are recorded in a spec; the empty app starts from IntelliJ with Postgres, Redis, Keycloak, Meilisearch and Mailpit started for you; the Spring Modulith boundary test passes.
-- [ ] Decide the stack (spec): `/architect stack & architecture`
+spec [0001](../specs/0001-stack-architecture/index.md)
+- [x] Decide the stack (spec): `/architect stack & architecture`
+- [ ] Scaffold from the decision: `/develop stack & architecture`
+- [ ] Verify it: `/check verify stack & architecture`
 
 ### 2. Coding standards & tooling
 Capture the real conventions and tooling from the scaffolded project, then install formatting, static checks, dependency scanning and pinned versions.
@@ -152,6 +155,7 @@ Out of scope for phase 1, kept so the plan stays honest.
 - **Richer promotions**: automatic deals, product or category coupons, free shipping coupons · needs a decision
 - **Review replies and photos** · needs a decision
 - **Google and Facebook login**: Keycloak setup only, no app code · needs a decision
+- **Admin editable email templates**: admin writes email templates in the UI, saved in the database with placeholders, used by notification; phase not set yet · from spec 0001 · needs a decision
 
 ## Legend
 
