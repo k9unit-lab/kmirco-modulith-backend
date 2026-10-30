@@ -35,3 +35,4 @@ integration: on
 
 - Work on a feature branch, never commit to `main` directly.
 - Never push or open a PR without the owner's OK.
+- Never delete a branch (local or remote). After a merge, add the branch to `docs/branches-to-delete.md`; the owner deletes them all after the final phase.
