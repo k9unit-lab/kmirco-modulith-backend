@@ -2,7 +2,30 @@
 
 E-commerce backend built as a Spring Modulith: one Spring Boot app, strict modules, each one ready to become its own microservice later.
 
-Status: not scaffolded yet. No code, build or test commands exist yet. `/audit` fills those in after the project is scaffolded.
+Status: scaffolded (scope feature 1 done). `/audit` adds the full conventions and tooling next.
+
+## Stack
+
+Java 25, Spring Boot 4.1.2, Spring Modulith 2.1.2, Maven (wrapper committed), PostgreSQL, Redis, Keycloak, Meilisearch, Mailpit. Source: `docs/specs/0001-stack-architecture/index.md` (`## Proposed stack`).
+
+## Build approach
+
+Tracer Bullet (prove one thin real path through every layer first, then thicken one part at a time). Source: `docs/scope/scope.md` header.
+
+## Commands
+
+- Needs JDK 25 (the build fails on Java 21 with a "class file version" error).
+- Run: copy `.env.example` to `.env`, start Docker, then run `KmicroApplication` in IntelliJ (run config in `.run/`, Spring profile `local`), or `./mvnw spring-boot:run -Dspring-boot.run.profiles=local`. Spring Boot starts the `core` Compose containers for you.
+- The packaged jar (`java -jar`) leaves out Docker Compose support on purpose, so run locally from IntelliJ or Maven.
+- Boundary test: `./mvnw test -Dtest=ModularityTests` (no Docker needed). Module docs land in `target/spring-modulith-docs/`.
+- Local ports: app 8080, Postgres 55432 (`POSTGRES_PORT`), Redis 56379 (`REDIS_PORT`), Keycloak 8081, Meilisearch 7700, Mailpit SMTP 1025 and UI 8025.
+
+## Code layout
+
+- One package per module under `com.kmicro` (12 modules plus the open `shared` kernel). Each module's `package-info.java` lists its `allowedDependencies`; add a new arrow on purpose, never to silence the boundary test.
+- Each module exposes only `api/` and `events/` (named interfaces). Everything else in the module is internal.
+- Flyway: one folder per module, `src/main/resources/db/migration/<module>/`, files named `V<block>_<n>__<module>_<what>.sql`. Blocks: modulith 0, identity 1, customer 2, catalog 3, search 4, inventory 5, cart 6, ordering 7, payment 8, notification 9, settings 10, promotion 11, review 12. A new module folder must also be added to `spring.flyway.locations` and `spring.flyway.schemas` in `application.yml`.
+- Config: shared settings in `application.yml`, local only settings in `application-local.yml`, secrets only from env vars.
 
 ## Source of truth
 

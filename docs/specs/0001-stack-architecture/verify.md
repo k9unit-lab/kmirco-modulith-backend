@@ -8,7 +8,7 @@ AC map (the spec lists its contract under `## Requirements`, not as numbered ACs
 Before you start: Docker is running, and `.env` exists (copy `.env.example`, change the passwords, keep `MEILI_MASTER_KEY` at least 16 characters).
 
 ## UI / manual
-- [ ] In IntelliJ, run the `KmicroApplication` run configuration (Spring profile `local`) → the app starts with no errors, and the log shows Docker Compose starting the `core` services → AC-1
+- [x] In IntelliJ, run the `KmicroApplication` run configuration (Spring profile `local`) → the app starts with no errors, and the log shows Docker Compose starting the `core` services → AC-1
 - [x] Watch the startup log → Flyway applies the 13 first migrations (`V0_1` modulith through `V12_1` review), and the app logs `Started KmicroApplication` → AC-1
 - [x] Open http://localhost:8080/actuator/health → `{"status":"UP"}` → AC-1
 - [x] Open http://localhost:8081 and log in with `KEYCLOAK_ADMIN` / `KEYCLOAK_ADMIN_PASSWORD` → the admin console loads, and the realm list shows `kmicro` → AC-1
