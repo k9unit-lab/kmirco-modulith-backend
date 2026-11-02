@@ -47,7 +47,7 @@ spec [0001](../specs/0001-stack-architecture/index.md) · code in `pom.xml`, `co
 Capture the real conventions and tooling from the scaffolded project, then install formatting, static checks, dependency scanning and pinned versions.
 **Done when:** root `AGENTS.md` lists the real build and test commands and conventions, and the format, check and dependency scan steps run clean.
 code in `pom.xml`, `.editorconfig`, `.github/dependabot.yml`
-- [ ] Capture conventions + tooling choices: `/audit`
+- [x] Capture conventions + tooling choices: `/audit`
 
 ### 3. Data model · needs a decision
 One schema per module for every phase 1 module, money as amount plus currency, UUID keys, order number sequence, `sellerId` ready for later, and no links across schemas.
