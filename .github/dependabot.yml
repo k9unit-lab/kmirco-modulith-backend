@@ -1,0 +1,21 @@
+# Weekly dependency and image updates. The cooldown waits 7 days after a release,
+# matching the AGENTS.md rule "prefer versions published at least 7 days ago".
+version: 2
+updates:
+  - package-ecosystem: maven
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    open-pull-requests-limit: 10
+    groups:
+      maven-minor-and-patch:
+        update-types: [minor, patch]
+
+  - package-ecosystem: docker-compose
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7

@@ -16,7 +16,7 @@ _The web screens for each slice are built in the kmicro-frontend repo (see `docs
 | # | Feature | Phase | Status |
 |---|---------|-------|--------|
 | 1 | Stack & architecture | Foundation | done |
-| 2 | Coding standards & tooling | Foundation | planned |
+| 2 | Coding standards & tooling | Foundation | in-progress |
 | 3 | Data model | Foundation | planned |
 | 4 | Security & login foundation | Foundation | planned |
 | 5 | Core buying loop | Slice 1 | planned |
@@ -43,9 +43,10 @@ spec [0001](../specs/0001-stack-architecture/index.md) · code in `pom.xml`, `co
 - [x] Scaffold from the decision: `/develop stack & architecture`
 - [x] Verify it: `/check verify stack & architecture`
 
-### 2. Coding standards & tooling
+### 2. Coding standards & tooling · in-progress
 Capture the real conventions and tooling from the scaffolded project, then install formatting, static checks, dependency scanning and pinned versions.
 **Done when:** root `AGENTS.md` lists the real build and test commands and conventions, and the format, check and dependency scan steps run clean.
+code in `pom.xml`, `.editorconfig`, `.github/dependabot.yml`
 - [ ] Capture conventions + tooling choices: `/audit`
 
 ### 3. Data model · needs a decision
