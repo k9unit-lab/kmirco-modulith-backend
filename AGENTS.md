@@ -17,6 +17,7 @@ Tracer Bullet (prove one thin real path through every layer first, then thicken 
 - Needs JDK 25 (the build fails on Java 21 with a "class file version" error).
 - Run: copy `.env.example` to `.env`, start Docker, then run `KmicroApplication` in IntelliJ (run config in `.run/`, Spring profile `local`), or `./mvnw spring-boot:run -Dspring-boot.run.profiles=local`. Spring Boot starts the `core` Compose containers for you.
 - The packaged jar (`java -jar`) leaves out Docker Compose support on purpose, so run locally from IntelliJ or Maven.
+- Build: `./mvnw -DskipTests package`.
 - Boundary test: `./mvnw test -Dtest=ModularityTests` (no Docker needed). Module docs land in `target/spring-modulith-docs/`.
 - Local ports: app 8080, Postgres 55432 (`POSTGRES_PORT`), Redis 56379 (`REDIS_PORT`), Keycloak 8081, Meilisearch 7700, Mailpit SMTP 1025 and UI 8025.
 
@@ -50,6 +51,7 @@ Skills live in `.agents/skills/` (Claude Code reads them through the `.claude/sk
 - Phase 1 scope only, unless the owner says otherwise. Later phase work is listed in the design doc, section 16.
 - No new dependency, skill, MCP server or tool install without the owner's approval. Never run `npx skills add`. Pin exact versions. Prefer versions published at least 7 days ago.
 - No secrets in the repo. Config comes from environment variables; commit a `.env.example` only.
+- Tooling (chosen in feature 2, installed by `/develop tooling`): Spotless with Palantir Java Format, compiler warnings as errors (`-Xlint:all -Werror`), Dependabot for dependency and image updates, plus `.editorconfig`.
 - Write for the owner in short, simple English.
 
 ## Git
