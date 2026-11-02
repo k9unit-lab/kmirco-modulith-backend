@@ -1,6 +1,6 @@
 # Local dev containers. Spring Boot starts the "core" profile for you when you run the app with the "local" profile.
 # Values come from .env (copy .env.example). Images are pinned by tag and digest, never :latest.
-name: kmicro
+name: kmicro-mod-be
 
 services:
   postgres:
@@ -12,7 +12,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       KEYCLOAK_DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
     ports:
-      - "5432:5432"
+      - "${POSTGRES_PORT:-55432}:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
       - ./docker/postgres/init:/docker-entrypoint-initdb.d:ro
@@ -29,7 +29,7 @@ services:
     environment:
       REDIS_PASSWORD: ${REDIS_PASSWORD:-}
     ports:
-      - "6379:6379"
+      - "${REDIS_PORT:-56379}:6379"
     volumes:
       - redis-data:/data
 
