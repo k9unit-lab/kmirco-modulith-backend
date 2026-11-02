@@ -17,7 +17,7 @@ _The web screens for each slice are built in the kmicro-frontend repo (see `docs
 |---|---------|-------|--------|
 | 1 | Stack & architecture | Foundation | done |
 | 2 | Coding standards & tooling | Foundation | done |
-| 3 | Data model | Foundation | planned |
+| 3 | Data model | Foundation | in-progress |
 | 4 | Security & login foundation | Foundation | planned |
 | 5 | Core buying loop | Slice 1 | planned |
 | 6 | Product search | Slice 2 | planned |
@@ -49,10 +49,17 @@ Capture the real conventions and tooling from the scaffolded project, then insta
 code in `pom.xml`, `.editorconfig`, `.github/dependabot.yml`
 - [x] Capture conventions + tooling choices: `/audit`
 
-### 3. Data model · needs a decision
+### 3. Data model · in-progress
 One schema per module for every phase 1 module, money as amount plus currency, UUID keys, order number sequence, `sellerId` ready for later, and no links across schemas.
 **Done when:** Flyway creates every phase 1 schema from empty, and the model supports later phases (sellers, partial refunds, abandoned cart) without a breaking migration.
-- [ ] Design it (spec): `/architect data model`
+spec [0002](../specs/0002-data-model/index.md)
+- [x] Design it (spec): `/architect data model`
+- [ ] Build it: `/develop data model`
+  - [ ] Shared types: `UuidV7`, typed IDs with `SellerId.HOUSE`, `CurrencyCode`, `Money` (AC-1, AC-2, AC-3)
+  - [ ] Persistence base: audited, UUID and versioned entity bases, JPA auditing, UTC (AC-4)
+  - [ ] Migrations and full check: order number sequence, `shedlock` table, Flyway from empty, `./mvnw verify` (AC-5, AC-6)
+  - [ ] Review later phase readiness and slice handoff tables with the owner (AC-7)
+- [ ] Verify it: `/check verify data model`
 
 ### 4. Security & login foundation · needs a decision
 Keycloak realm as code, web login through the backend (BFF) with a Redis session cookie and CSRF protection, Bearer tokens for mobile, roles, the shared error format and rate limiting.
