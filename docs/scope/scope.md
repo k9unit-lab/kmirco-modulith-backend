@@ -52,12 +52,12 @@ code in `pom.xml`, `.editorconfig`, `.github/dependabot.yml`
 ### 3. Data model · in-progress
 One schema per module for every phase 1 module, money as amount plus currency, UUID keys, order number sequence, `sellerId` ready for later, and no links across schemas.
 **Done when:** Flyway creates every phase 1 schema from empty, and the model supports later phases (sellers, partial refunds, abandoned cart) without a breaking migration.
-spec [0002](../specs/0002-data-model/index.md)
+spec [0002](../specs/0002-data-model/index.md) · code in `src/main/java/com/kmicro/shared/`, `src/main/resources/db/migration/`
 - [x] Design it (spec): `/architect data model`
 - [ ] Build it: `/develop data model`
-  - [ ] Shared types: `UuidV7`, typed IDs with `SellerId.HOUSE`, `CurrencyCode`, `Money` (AC-1, AC-2, AC-3)
-  - [ ] Persistence base: audited, UUID and versioned entity bases, JPA auditing, UTC (AC-4)
-  - [ ] Migrations and full check: order number sequence, `shedlock` table, Flyway from empty, `./mvnw verify` (AC-5, AC-6)
+  - [x] Shared types: `UuidV7`, typed IDs with `SellerId.HOUSE`, `CurrencyCode`, `Money` (AC-1, AC-2, AC-3)
+  - [x] Persistence base: audited, UUID and versioned entity bases, JPA auditing, UTC (AC-4)
+  - [x] Migrations and full check: order number sequence, `shedlock` table, Flyway from empty, `./mvnw verify` (AC-5, AC-6)
   - [ ] Review later phase readiness and slice handoff tables with the owner (AC-7)
 - [ ] Verify it: `/check verify data model`
 
