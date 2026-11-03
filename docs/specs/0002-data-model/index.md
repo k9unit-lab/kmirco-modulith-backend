@@ -1,7 +1,7 @@
 # 0002. Phase 1 data model and shared persistence base
 
 **Date**: 2026-11-02
-**Status**: Proposed
+**Status**: Accepted
 
 ## Summary
 
@@ -284,12 +284,12 @@ Each migration follows the AGENTS.md naming (`V<block>_<n>__<module>_<what>.sql`
 
 Tracer Bullet: this feature builds only the shared base that the first real thread (feature 5) runs on, then proves it on an empty database.
 
-1. Add `UuidV7` and the typed ID records (with `SellerId.HOUSE`) in `com.kmicro.shared`, satisfies **AC-2**, **AC-3**
-2. Add `CurrencyCode`, `Money` (rounding, currency mismatch error) and `CurrencyCodeConverter`, satisfies **AC-1**
-3. Add `AuditedEntity<ID>`, `UuidEntity`, and the two versioned variants (`@MappedSuperclass`, `Persistable` with the transient `isNew` flag flipped in `@PostLoad`/`@PostPersist`, boxed `Long` version), JPA auditing config using the shared `Clock`, and an `AuditorAware<UUID>` that returns empty for now; set `hibernate.jdbc.time_zone: UTC`, satisfies **AC-4**
-4. Add `db/migration/ordering/V7_2__ordering_order_number_sequence.sql` creating `ordering.order_number_seq`, and `db/migration/modulith/V0_2__modulith_shedlock.sql` creating `public.shedlock`, satisfies **AC-5**
-5. Run `./mvnw spotless:apply` and `./mvnw verify`; wipe the local Postgres volume and start the app to prove Flyway runs from empty, satisfies **AC-5**, **AC-6**
-6. Review the *Later phase readiness* and *Slice handoff* tables with the owner before feature 5 starts, satisfies **AC-7**
+1. [x] Add `UuidV7` and the typed ID records (with `SellerId.HOUSE`) in `com.kmicro.shared`, satisfies **AC-2**, **AC-3**
+2. [x] Add `CurrencyCode`, `Money` (rounding, currency mismatch error) and `CurrencyCodeConverter`, satisfies **AC-1**
+3. [x] Add `AuditedEntity<ID>`, `UuidEntity`, and the two versioned variants (`@MappedSuperclass`, `Persistable` with the transient `isNew` flag flipped in `@PostLoad`/`@PostPersist`, boxed `Long` version), JPA auditing config using the shared `Clock`, and an `AuditorAware<UUID>` that returns empty for now; set `hibernate.jdbc.time_zone: UTC`, satisfies **AC-4**
+4. [x] Add `db/migration/ordering/V7_2__ordering_order_number_sequence.sql` creating `ordering.order_number_seq`, and `db/migration/modulith/V0_2__modulith_shedlock.sql` creating `public.shedlock`, satisfies **AC-5**
+5. [x] Run `./mvnw spotless:apply` and `./mvnw verify`; wipe the local Postgres volume and start the app to prove Flyway runs from empty, satisfies **AC-5**, **AC-6**
+6. [x] Review the *Later phase readiness* and *Slice handoff* tables with the owner before feature 5 starts, satisfies **AC-7**
 
 ## Consequences
 
@@ -311,7 +311,7 @@ Tracer Bullet: this feature builds only the shared base that the first real thre
 
 ## Follow-up
 
-- [ ] Update `docs/design/backend-design.md` (Modules, Variants, Main endpoints) and `docs/design/frontend-design.md` to say other modules and the cart API use `variantId`, not SKU.
+- [x] Update `docs/design/backend-design.md` (Modules, Variants, Main endpoints) and `docs/design/frontend-design.md` to say other modules and the cart API use `variantId`, not SKU.
 - [ ] Add to the design doc: the new events (`PaymentNeedsRefund`, `GuestOrdersLinked`, `OrderRefunded`), the `CAPTURED_UNAPPLIED` payment state with its admin list, and the `RETURNED` stock state.
 - [ ] Decide how long `notification.email_deliveries` keeps recipient emails (slice 10, privacy).
 - [ ] Consider `version` on `promotion.coupons` and `catalog.categories` when feature 10 (safe concurrent edits) is designed.

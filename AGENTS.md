@@ -2,7 +2,7 @@
 
 E-commerce backend built as a Spring Modulith: one Spring Boot app, strict modules, each one ready to become its own microservice later.
 
-Status: scaffolded (scope feature 1 done). `/audit` adds the full conventions and tooling next.
+Status: foundations in progress (scope features 1 to 3 done: stack, tooling, data model base).
 
 ## Stack
 
@@ -28,6 +28,10 @@ Tracer Bullet (prove one thin real path through every layer first, then thicken 
 - One package per module under `com.kmicro` (12 modules plus the open `shared` kernel). Each module's `package-info.java` lists its `allowedDependencies`; add a new arrow on purpose, never to silence the boundary test.
 - Each module exposes only `api/` and `events/` (named interfaces). Everything else in the module is internal.
 - Flyway: one folder per module, `src/main/resources/db/migration/<module>/`, files named `V<block>_<n>__<module>_<what>.sql`. Blocks: modulith 0, identity 1, customer 2, catalog 3, search 4, inventory 5, cart 6, ordering 7, payment 8, notification 9, settings 10, promotion 11, review 12. A new module folder must also be added to `spring.flyway.locations` and `spring.flyway.schemas` in `application.yml`.
+- Shared kernel (`com.kmicro.shared`): `id` (`UuidV7`, typed ID records, `SellerId.HOUSE`), `money` (`CurrencyCode`, `Money`, auto applied `CurrencyCodeConverter`), `persistence` (entity bases, JPA auditing), `time` (one UTC `Clock` bean).
+- Entities: extend `UuidEntity` (or `VersionedUuidEntity`); natural or composite key tables extend `AuditedEntity<ID>` (or `VersionedEntity<ID>`) and declare their own `@Id`. New ids come from `UuidV7.next()` or `<TypedId>.newId()`, never `UUID.randomUUID()`; time comes from the `Clock` bean, never a bare `Instant.now()`.
+- Money: always `Money` (`BigDecimal` plus `CurrencyCode`), never `double`; round with `rounded()` (currency decimals, half up).
+- Tables: follow *Rules every table follows* in `docs/specs/0002-data-model/index.md` (names, keys, money columns, audit columns, no cross schema FK). Each slice creates its own tables per that spec's *Slice handoff* table.
 - Config: shared settings in `application.yml`, local only settings in `application-local.yml`, secrets only from env vars.
 
 ## Source of truth

@@ -136,7 +136,7 @@ Small on purpose. Keycloak does passwords, email verification, lockout and MFA.
 ### customer `customer`
 
 Owns  
-Profile (name, phone), addresses, wishlist (SKUs saved by the customer), notification preferences and consent (needed later for push).
+Profile (name, phone), addresses, wishlist (variants saved by the customer, by `variantId`), notification preferences and consent (needed later for push).
 
 Listens  
 `UserRegistered` → create an empty profile
@@ -156,7 +156,7 @@ Listens
 `StoreCurrencyChanged` → mark prices for re-entry
 
 API  
-`CatalogApi.priceOf(skus)`, `CatalogApi.isSellable(sku)`
+`CatalogApi.priceOf(variantIds)`, `CatalogApi.isSellable(variantId)`
 
 ### search `search`
 
@@ -172,7 +172,7 @@ Admin can rebuild the index from the database at any time. Category browsing sti
 ### inventory `inventory`
 
 Owns  
-Stock per SKU, reservations with an expiry time.
+Stock per variant (keyed by `variant_id`), reservations with an expiry time.
 
 API  
 `InventoryApi.reserve(orderId, lines)` → reservation or "out of stock"
@@ -186,7 +186,7 @@ Publishes
 ### cart `cart`
 
 Owns  
-Carts and items: SKU and quantity only, **no price**. Owner is a customer id or a guest cart token. Last-activity time (needed for abandoned cart).
+Carts and items: `variantId` and quantity only, **no price**. Owner is a customer id or a guest cart token. Last-activity time (needed for abandoned cart).
 
 API  
 `CartApi.snapshot(cartId)`; merge guest cart on login
@@ -260,7 +260,7 @@ API
 Publishes  
 `StoreCurrencyChanged`, `TaxSettingsChanged`
 
-Shared kernel (`shared`), kept very small: `Money`, typed IDs (`OrderId`, `Sku`…), the error format, and clock/time helpers. Business logic never goes here.
+Shared kernel (`shared`), kept very small: `Money`, typed IDs (`OrderId`, `VariantId`…), the error format, and clock/time helpers. Business logic never goes here.
 
 There is no "admin" module. Admin is a role. Each module has its own admin endpoints under `/api/v1/admin/<module>/…`. This keeps every rule about orders inside ordering, every rule about stock inside inventory, and so on.
 
@@ -365,7 +365,7 @@ Admin can set both, only the flat fee, or a flat fee of 0. `itemsTotal` is the t
 
 - Admin creates **option types** (e.g. Size, Color, Weight, Material) and their **values** (S, M, L; Red, Blue; 500 g, 1 kg).
 - A product picks which option types it uses. Each allowed combination is a **variant** with its own SKU, price, stock (in inventory) and images.
-- A product with no options has exactly one variant, so cart, orders and inventory always work with SKUs.
+- A product with no options has exactly one variant, so cart, orders and inventory always work with variants, referenced by `variantId` (UUID). The SKU is an editable, readable label only; order lines keep the SKU text as a snapshot (spec 0002).
 - Search indexes variant options as filters (e.g. "Size: M").
 
 ### Currency change
@@ -413,7 +413,7 @@ sequenceDiagram
   participant RZ as Razorpay
   FE->>O: POST /api/v1/checkout (Idempotency-Key)
   O->>C: snapshot(cart)
-  O->>CA: priceOf(skus)
+  O->>CA: priceOf(variantIds)
   O->>S: current() (currency, tax, shipping)
   O->>I: reserve(lines, 15 min)
   O->>O: save order PENDING_PAYMENT
@@ -450,7 +450,7 @@ Steps 2–6 call other modules directly, which is safe while everything is in on
 
 1.  Catalog saves a product → `ProductChanged` (saved in the event registry in the same transaction).
 2.  The search module listens and writes the document to Meilisearch. If Meilisearch is down, the event stays "incomplete" and is retried.
-3.  Inventory publishes `StockLevelChanged` only when a SKU goes in stock or out of stock (not on every unit), to keep index writes low.
+3.  Inventory publishes `StockLevelChanged` only when a variant goes in stock or out of stock (not on every unit), to keep index writes low.
 4.  Admin action "Rebuild search index" re-sends all sellable products.
 
 ## Events and Kafka
@@ -531,10 +531,10 @@ Only events that something outside the app may need. They are marked with `@Exte
 | promotion | `POST /cart/coupon` (apply, returns the new totals), `DELETE /cart/coupon`                                                                                                                                                                                               |
 | review    | `GET /products/{id}/reviews`, `PUT /me/reviews/{productId}`, `DELETE /me/reviews/{productId}`                                                                                                                                                                            |
 | search    | `GET /search?q=&category=&minPrice=&maxPrice=&inStock=&sort=`                                                                                                                                                                                                            |
-| cart      | `GET /cart`, `PUT /cart/items/{sku}`, `DELETE /cart/items/{sku}` (by token or by user)                                                                                                                                                                                   |
+| cart      | `GET /cart`, `PUT /cart/items/{variantId}`, `DELETE /cart/items/{variantId}` (by token or by user)                                                                                                                                                                                   |
 | ordering  | `POST /checkout`, `GET /me/orders`, `GET /me/orders/{id}`, `POST /me/orders/{id}/cancel`, `GET /guest/orders/{id}?sig=`                                                                                                                                                  |
 | payment   | `POST /payments/{orderId}/retry`, `POST /webhooks/razorpay`                                                                                                                                                                                                              |
-| customer  | `GET/PUT /me/profile`, `GET/POST/PUT/DELETE /me/addresses`, `GET /me/wishlist`, `PUT/DELETE /me/wishlist/{sku}`                                                                                                                                                          |
+| customer  | `GET/PUT /me/profile`, `GET/POST/PUT/DELETE /me/addresses`, `GET /me/wishlist`, `PUT/DELETE /me/wishlist/{variantId}`                                                                                                                                                          |
 | settings  | `GET /store` (public: name, currency, tax display)                                                                                                                                                                                                                       |
 | admin     | `/admin/catalog/…` (incl. `/admin/catalog/option-types`), `/admin/inventory/…`, `/admin/orders/…` (incl. ship with tracking info, record refund), `/admin/coupons/…`, `/admin/reviews/…` (hide/unhide), `/admin/customers/…`, `/admin/settings`, `/admin/search/reindex` |
 

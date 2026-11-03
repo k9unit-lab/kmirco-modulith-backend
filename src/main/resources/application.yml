@@ -9,6 +9,10 @@ spring:
     open-in-view: false
     hibernate:
       ddl-auto: validate
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
 
   # One Flyway run for all modules. Each module folder owns its schema; the history table lives in public.
   # Version blocks: modulith 0, identity 1, customer 2, catalog 3, search 4, inventory 5, cart 6,
