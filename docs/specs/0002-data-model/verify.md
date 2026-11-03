@@ -17,7 +17,7 @@ _Steps derived from spec 0002 acceptance criteria. `/check verify` runs these; `
 - [x] Change the machine time zone (for example `TZ=Asia/Kolkata`) and repeat the save → `created_at` in the database is still the right UTC instant (`hibernate.jdbc.time_zone: UTC`) → AC-4
 
 ## Owner review
-- [ ] Read the *Later phase readiness* and *Slice handoff* tables in the spec with the owner; each later phase needs only additive changes → AC-7
+- [x] Read the *Later phase readiness* and *Slice handoff* tables in the spec with the owner; each later phase needs only additive changes → AC-7
 
 ## Acceptance-criteria coverage
 - AC-1 covered by the three `Money`/`CurrencyCode` steps · AC-2 by the `UuidV7` and typed ID steps · AC-3 by the `SellerId.HOUSE` step · AC-4 by the throwaway entity and time zone steps · AC-5 by the wipe and start, sequence and shedlock steps · AC-6 by `./mvnw verify` · AC-7 by the owner review

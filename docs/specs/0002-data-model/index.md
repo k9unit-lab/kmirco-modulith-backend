@@ -1,7 +1,7 @@
 # 0002. Phase 1 data model and shared persistence base
 
 **Date**: 2026-11-02
-**Status**: In Progress
+**Status**: Accepted
 
 ## Summary
 
@@ -289,7 +289,7 @@ Tracer Bullet: this feature builds only the shared base that the first real thre
 3. [x] Add `AuditedEntity<ID>`, `UuidEntity`, and the two versioned variants (`@MappedSuperclass`, `Persistable` with the transient `isNew` flag flipped in `@PostLoad`/`@PostPersist`, boxed `Long` version), JPA auditing config using the shared `Clock`, and an `AuditorAware<UUID>` that returns empty for now; set `hibernate.jdbc.time_zone: UTC`, satisfies **AC-4**
 4. [x] Add `db/migration/ordering/V7_2__ordering_order_number_sequence.sql` creating `ordering.order_number_seq`, and `db/migration/modulith/V0_2__modulith_shedlock.sql` creating `public.shedlock`, satisfies **AC-5**
 5. [x] Run `./mvnw spotless:apply` and `./mvnw verify`; wipe the local Postgres volume and start the app to prove Flyway runs from empty, satisfies **AC-5**, **AC-6**
-6. [ ] Review the *Later phase readiness* and *Slice handoff* tables with the owner before feature 5 starts, satisfies **AC-7**
+6. [x] Review the *Later phase readiness* and *Slice handoff* tables with the owner before feature 5 starts, satisfies **AC-7**
 
 ## Consequences
 
