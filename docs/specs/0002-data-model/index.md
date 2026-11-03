@@ -311,7 +311,7 @@ Tracer Bullet: this feature builds only the shared base that the first real thre
 
 ## Follow-up
 
-- [ ] Update `docs/design/backend-design.md` (Modules, Variants, Main endpoints) and `docs/design/frontend-design.md` to say other modules and the cart API use `variantId`, not SKU.
+- [x] Update `docs/design/backend-design.md` (Modules, Variants, Main endpoints) and `docs/design/frontend-design.md` to say other modules and the cart API use `variantId`, not SKU.
 - [ ] Add to the design doc: the new events (`PaymentNeedsRefund`, `GuestOrdersLinked`, `OrderRefunded`), the `CAPTURED_UNAPPLIED` payment state with its admin list, and the `RETURNED` stock state.
 - [ ] Decide how long `notification.email_deliveries` keeps recipient emails (slice 10, privacy).
 - [ ] Consider `version` on `promotion.coupons` and `catalog.categories` when feature 10 (safe concurrent edits) is designed.

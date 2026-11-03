@@ -69,7 +69,7 @@ From the review of the current repo (about 12k lines of TypeScript).
 | Admin decided by reading roles from the token by hand          | Fragile; easy to get wrong                             | Roles read from the OIDC user profile in one place (`useRoles()`)                  |
 | ~35 `callApi` calls inside components, hand-typed paths        | Hard to change; types can drift from the backend       | Generated client + RTK Query hooks per feature                                     |
 | `user.id` in URLs (`/orders/user/{id}`)                        | Matches the old insecure API                           | `/api/v1/me/…`; user comes from the token                                          |
-| Cart in `localStorage`, sends price and name to server         | Client could set prices; cart lost across devices      | Server cart: SKU + quantity only                                                   |
+| Cart in `localStorage`, sends price and name to server         | Client could set prices; cart lost across devices      | Server cart: `variantId` + quantity only                                                   |
 | Wishlist in `localStorage` only                                | Lost across devices                                    | Depends on the wishlist decision (section 17)                                      |
 | `withCredentials` sent as a header; 5 s timeout overrides 30 s | Bugs: the option does nothing; slow calls fail         | Fixed in the new API layer                                                         |
 | Two toast libraries, two icon sets, two fonts, lodash          | Larger bundle, mixed look                              | One of each (section 12)                                                           |
@@ -209,7 +209,7 @@ Lives under `/admin`, loads only for `ADMIN` users, and is split into its own co
 | Products       | Create and edit products, choose option types, generate variants, set price per variant, upload images                                                      | **Reuse + change** |
 | Option types   | Create Size, Color, Weight… and their values                                                                                                                | **New**            |
 | Categories     | Create and order categories                                                                                                                                 | **New**            |
-| Inventory      | Stock per SKU, adjust stock, low-stock list                                                                                                                 | **New**            |
+| Inventory      | Stock per variant, adjust stock, low-stock list                                                                                                                 | **New**            |
 | Orders         | List and filter, view detail, move status (only allowed moves), add carrier + tracking number when shipping, record a refund done in the Razorpay dashboard | **Reuse + change** |
 | Coupons        | Create, edit, turn off; see how often each was used                                                                                                         | **New**            |
 | Reviews        | List reviews, hide or unhide with a reason                                                                                                                  | **New**            |
